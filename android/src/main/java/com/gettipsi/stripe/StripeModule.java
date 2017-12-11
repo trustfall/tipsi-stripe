@@ -65,7 +65,9 @@ import com.stripe.android.model.SourceRedirect;
 import com.stripe.android.model.Token;
 
 import com.gettipsi.stripe.dialog.AddCardDialogFragment;
+import com.gettipsi.stripe.dialog.EnterAddressDialogFragment;
 import com.gettipsi.stripe.util.DataUtil;
+import com.gettipsi.stripe.util.PlainAddress;
 
 import java.util.Map;
 
@@ -253,7 +255,7 @@ public class StripeModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void createTokenWithBankAccount(final ReadableMap accountData, final Promise promise) {
     try {
-      stripe.createBankAccountToken(createBankAccount(accountData),
+      stripe.createBankAccountToken(DataUtil.createBankAccount(accountData),
         publicKey,
         null,
         new TokenCallback() {

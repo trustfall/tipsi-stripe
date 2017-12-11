@@ -34,7 +34,7 @@ public class DataUtil {
     }
   }
 
-  private static String exist(final ReadableMap map, final String key, final String def) {
+  public static String exist(final ReadableMap map, final String key, final String def) {
     if (map.hasKey(key)) {
       return map.getString(key);
     } else {
@@ -43,7 +43,7 @@ public class DataUtil {
     }
   }
 
-  private static Boolean exist(final ReadableMap map, final String key, final Boolean def) {
+  public static Boolean exist(final ReadableMap map, final String key, final Boolean def) {
     if (map.hasKey(key)) {
       return map.getBoolean(key);
     } else {
@@ -52,7 +52,7 @@ public class DataUtil {
     }
   }
 
-  private static ReadableArray exist(final ReadableMap map, final String key, final ReadableArray def) {
+  public static ReadableArray exist(final ReadableMap map, final String key, final ReadableArray def) {
     if (map.hasKey(key)) {
       return map.getArray(key);
     } else {
@@ -61,7 +61,7 @@ public class DataUtil {
     }
   }
 
-  private static ReadableMap exist(final ReadableMap map, final String key, final ReadableMap def) {
+  public static ReadableMap exist(final ReadableMap map, final String key, final ReadableMap def) {
     if (map.hasKey(key)) {
       return map.getMap(key);
     } else {
@@ -70,7 +70,7 @@ public class DataUtil {
     }
   }
 
-  private static String exist(final ReadableMap map, final String key) {
+  public static String exist(final ReadableMap map, final String key) {
     return exist(map, key, (String) null);
   }
 
@@ -99,7 +99,7 @@ public class DataUtil {
     );
   }
 
-  public PlainAddress createAddress(ReadableMap map) {
+  public static PlainAddress createAddress(ReadableMap map) {
     PlainAddress address = new PlainAddress();
     address.name = exist(map, PlainAddress.NAME);
     address.address = exist(map, PlainAddress.ADDRESS);

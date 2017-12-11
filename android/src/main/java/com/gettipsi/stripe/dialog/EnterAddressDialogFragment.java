@@ -1,15 +1,20 @@
-package com.gettipsi.stripe.util;
+package com.gettipsi.stripe.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+
+import com.gettipsi.stripe.R;
+import com.gettipsi.stripe.util.PlainAddress;
+import com.gettipsi.stripe.util.DataUtil;
 
 public class EnterAddressDialogFragment extends DialogFragment {
   public AddCardDialogFragment next = null;
@@ -47,12 +52,12 @@ public class EnterAddressDialogFragment extends DialogFragment {
   @NonNull
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
+    final Activity activity = getActivity();
     final View view = View.inflate(getActivity(), R.layout.address_layout, null);
     bindViews(view);
     if (data != null) {
       initValues(data);
     }
-    Activity activity = getActivity();
     AlertDialog dialog = null;
     if (activity != null) {
       dialog = new AlertDialog.Builder(getActivity())
@@ -62,8 +67,8 @@ public class EnterAddressDialogFragment extends DialogFragment {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
             collectData();
-            next.setAddress(JSBridgeUtil.convertPlainAddressToWritableMap(data));
-            next.show(getCurrentActivity().getFragmentManager(), "AddNewCard");
+            next.setAddress(DataUtil.convertPlainAddressToWritableMap(data));
+            next.show(activity.getFragmentManager(), "AddNewCard");
           }
         })
         .setNegativeButton(android.R.string.cancel, null).create();
