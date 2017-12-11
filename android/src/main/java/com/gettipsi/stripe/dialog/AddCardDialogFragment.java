@@ -31,6 +31,7 @@ import com.stripe.android.TokenCallback;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
 
+import com.gettipsi.stripe.util.PlainAddress;
 
 /**
  * Created by dmitriy on 11/13/16
@@ -42,6 +43,8 @@ public class AddCardDialogFragment extends DialogFragment {
   private static final String TAG = AddCardDialogFragment.class.getSimpleName();
   private static final String CCV_INPUT_CLASS_NAME = SecurityCodeText.class.getSimpleName();
   private String PUBLISHABLE_KEY;
+
+  private WritableMap address = null;
 
   private ProgressBar progressBar;
   private CreditCardForm from;
@@ -61,6 +64,9 @@ public class AddCardDialogFragment extends DialogFragment {
     return fragment;
   }
 
+  public void setAddress(WritableMap address){
+    this.address = address;
+  }
 
   public void setPromise(Promise promise) {
     this.promise = promise;
@@ -120,7 +126,6 @@ public class AddCardDialogFragment extends DialogFragment {
     imageFlipedCard = (ImageView) view.findViewById(R.id.imageFlippedCard);
     imageFlipedCardBack = (ImageView) view.findViewById(R.id.imageFlippedCardBack);
   }
-
 
   private void init() {
     from.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -182,6 +187,7 @@ public class AddCardDialogFragment extends DialogFragment {
             newToken.putBoolean("livemode", token.getLivemode());
             newToken.putDouble("created", token.getCreated().getTime());
             newToken.putBoolean("user", token.getUsed());
+            newToken.putMap("billingAddress", address);
             final WritableMap cardMap = Arguments.createMap();
             final Card card = token.getCard();
             cardMap.putString("cardId", card.getFingerprint());
