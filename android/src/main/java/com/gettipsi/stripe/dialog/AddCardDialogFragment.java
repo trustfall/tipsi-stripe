@@ -47,12 +47,13 @@ public class AddCardDialogFragment extends DialogFragment {
   private PlainAddress address = null;
 
   private ProgressBar progressBar;
-  private CreditCardForm from;
+  private CreditCardForm form;
   private ImageView imageFlipedCard;
   private ImageView imageFlipedCardBack;
 
   private volatile Promise promise;
   private boolean successful;
+  private boolean isZipEnabled = false;
   private CardFlipAnimator cardFlipAnimator;
   private Button doneButton;
 
@@ -81,7 +82,12 @@ public class AddCardDialogFragment extends DialogFragment {
 
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
-    final View view = View.inflate(getActivity(), R.layout.payment_form_fragment_two, null);
+    final View view;
+    if(isZipEnabled){
+      view = View.inflate(getActivity(), R.layout.payment_form_fragment_two_zip, null);
+    } else {
+      view = View.inflate(getActivity(), R.layout.payment_form_fragment_two, null);
+    }
     final AlertDialog dialog = new AlertDialog.Builder(getActivity())
       .setView(view)
       .setTitle("Enter your card")
@@ -122,13 +128,13 @@ public class AddCardDialogFragment extends DialogFragment {
 
   private void bindViews(final View view) {
     progressBar = (ProgressBar) view.findViewById(R.id.buttonProgress);
-    from = (CreditCardForm) view.findViewById(R.id.credit_card_form);
+    form = (CreditCardForm) view.findViewById(R.id.credit_card_form);
     imageFlipedCard = (ImageView) view.findViewById(R.id.imageFlippedCard);
     imageFlipedCardBack = (ImageView) view.findViewById(R.id.imageFlippedCardBack);
   }
 
   private void init() {
-    from.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+    form.setOnFocusChangeListener(new View.OnFocusChangeListener() {
       @Override
       public void onFocusChange(final View view, boolean b) {
         if (CCV_INPUT_CLASS_NAME.equals(view.getClass().getSimpleName())) {
@@ -165,10 +171,14 @@ public class AddCardDialogFragment extends DialogFragment {
     successful = false;
   }
 
+  public void setZipEnabled(boolean enabled){
+    isZipEnabled = enabled;
+  }
+
   public void onSaveCLick() {
     doneButton.setEnabled(false);
     progressBar.setVisibility(View.VISIBLE);
-    final CreditCard fromCard = from.getCreditCard();
+    final CreditCard fromCard = form.getCreditCard();
     final Card card = new Card(
       fromCard.getCardNumber(),
       fromCard.getExpMonth(),
@@ -215,6 +225,9 @@ public class AddCardDialogFragment extends DialogFragment {
               cardMap.putString("addressZip", address.zip);
               cardMap.putString("email", address.email);
               cardMap.putString("phone", address.phone);
+            }
+            if(isZipEnabled) {
+              cardMap.putString("addressZip", fromCard.getZipCode());
             }
             newToken.putMap("card", cardMap);
             if (promise != null) {

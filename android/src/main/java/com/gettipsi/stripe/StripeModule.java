@@ -301,7 +301,8 @@ public class StripeModule extends ReactContextBaseJavaModule {
         addressDialog.next = cardDialog;
         addressDialog.show(getCurrentActivity().getFragmentManager(), "Address");
 
-      } else { //zip only
+      } else if(requiredBillingAddressFields.equals("zip")) { //zip only
+        cardDialog.setZipEnabled(true);
         cardDialog.show(getCurrentActivity().getFragmentManager(), "AddNewCard");
       }
     }

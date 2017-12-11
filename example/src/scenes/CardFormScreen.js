@@ -21,7 +21,7 @@ export default class CardFormScreen extends PureComponent {
       const token = await stripe.paymentRequestWithCardForm({
         // Only iOS support this options
         smsAutofillDisabled: true,
-        requiredBillingAddressFields: 'full',
+        requiredBillingAddressFields: 'zip',
         prefilledInformation: {
           billingAddress: {
             name: 'Gunilla Haugeh',
