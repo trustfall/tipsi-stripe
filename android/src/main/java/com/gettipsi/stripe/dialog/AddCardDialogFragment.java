@@ -44,7 +44,7 @@ public class AddCardDialogFragment extends DialogFragment {
   private static final String CCV_INPUT_CLASS_NAME = SecurityCodeText.class.getSimpleName();
   private String PUBLISHABLE_KEY;
 
-  private WritableMap address = null;
+  private PlainAddress address = null;
 
   private ProgressBar progressBar;
   private CreditCardForm from;
@@ -64,7 +64,7 @@ public class AddCardDialogFragment extends DialogFragment {
     return fragment;
   }
 
-  public void setAddress(WritableMap address){
+  public void setAddress(PlainAddress address) {
     this.address = address;
   }
 
@@ -187,7 +187,6 @@ public class AddCardDialogFragment extends DialogFragment {
             newToken.putBoolean("livemode", token.getLivemode());
             newToken.putDouble("created", token.getCreated().getTime());
             newToken.putBoolean("user", token.getUsed());
-            newToken.putMap("billingAddress", address);
             final WritableMap cardMap = Arguments.createMap();
             final Card card = token.getCard();
             cardMap.putString("cardId", card.getFingerprint());
@@ -195,15 +194,28 @@ public class AddCardDialogFragment extends DialogFragment {
             cardMap.putString("last4", card.getLast4());
             cardMap.putInt("expMonth", card.getExpMonth());
             cardMap.putInt("expYear", card.getExpYear());
-            cardMap.putString("country", card.getCountry());
             cardMap.putString("currency", card.getCurrency());
-            cardMap.putString("name", card.getName());
-            cardMap.putString("addressLine1", card.getAddressLine1());
-            cardMap.putString("addressLine2", card.getAddressLine2());
-            cardMap.putString("addressCity", card.getAddressCity());
-            cardMap.putString("addressState", card.getAddressState());
-            cardMap.putString("addressCountry", card.getAddressCountry());
-            cardMap.putString("addressZip", card.getAddressZip());
+
+            if (address == null) {
+              cardMap.putString("country", card.getCountry());
+              cardMap.putString("name", card.getName());
+              cardMap.putString("addressLine1", card.getAddressLine1());
+              cardMap.putString("addressLine2", card.getAddressLine2());
+              cardMap.putString("addressCity", card.getAddressCity());
+              cardMap.putString("addressState", card.getAddressState());
+              cardMap.putString("addressCountry", card.getAddressCountry());
+              cardMap.putString("addressZip", card.getAddressZip());
+            } else {
+              cardMap.putString("name", address.name);
+              cardMap.putString("addressLine1", address.address);
+              cardMap.putString("addressLine2", address.apartment);
+              cardMap.putString("addressCity", address.city);
+              cardMap.putString("addressState", address.state);
+              cardMap.putString("addressCountry", address.country);
+              cardMap.putString("addressZip", address.zip);
+              cardMap.putString("email", address.email);
+              cardMap.putString("phone", address.phone);
+            }
             newToken.putMap("card", cardMap);
             if (promise != null) {
               promise.resolve(newToken);
@@ -228,7 +240,7 @@ public class AddCardDialogFragment extends DialogFragment {
 
   public void showToast(String message) {
     Context context = getActivity();
-    if(context != null && !TextUtils.isEmpty(message)) {
+    if (context != null && !TextUtils.isEmpty(message)) {
       Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
   }

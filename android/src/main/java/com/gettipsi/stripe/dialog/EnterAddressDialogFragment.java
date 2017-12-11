@@ -68,7 +68,7 @@ public class EnterAddressDialogFragment extends DialogFragment {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
             collectData();
-            next.setAddress(DataUtil.convertPlainAddressToWritableMap(data));
+            next.setAddress(data);
             next.show(activity.getFragmentManager(), "AddNewCard");
           }
         })
