@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -60,7 +61,7 @@ public class EnterAddressDialogFragment extends DialogFragment {
     }
     AlertDialog dialog = null;
     if (activity != null) {
-      dialog = new AlertDialog.Builder(getActivity())
+      dialog = new AlertDialog.Builder(activity)
         .setView(view)
         .setTitle("Enter your address")
         .setPositiveButton("Done", new DialogInterface.OnClickListener() {
@@ -71,8 +72,12 @@ public class EnterAddressDialogFragment extends DialogFragment {
             next.show(activity.getFragmentManager(), "AddNewCard");
           }
         })
-        .setNegativeButton(android.R.string.cancel, null).create();
+        .setNegativeButton(android.R.string.cancel, null)
+        .create();
+
       dialog.show();
+      dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+      dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
     }
     return dialog;
   }
