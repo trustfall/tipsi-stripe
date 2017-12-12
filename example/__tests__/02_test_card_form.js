@@ -39,6 +39,11 @@ test('Test if user can use Card Form', async (t) => {
     }
   }
 
+  if (platform('android')) { // done on address fragment
+    await driver.waitForEnabled(doneButtonId, 20000)
+    await driver.click(doneButtonId)
+  }
+
   await driver.waitForEnabled(doneButtonId, 20000)
   await driver.click(doneButtonId)
   t.pass('User should be able to tap on `Done` button')
