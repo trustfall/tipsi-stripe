@@ -5,6 +5,21 @@
 
 React Native Stripe binding for iOS/Android platforms
 
+## Expokit fork
+This fork is made to run with ExpoKit SDK 23, make sure in your `build.gradle` file, change the build tools version to `26.0.2`, and appcompat support libraries to `v7:26.1.0` make sure you exclude the credit card entry module, within the expo compile block, like so:
+
+```diff
+...
+dependencies {
+  ...
+  compile('host.exp.exponent:expoview:23.0.0@aar') {
+    ...
++   exclude group: 'com.github.thefuntasty', module: 'CreditCardEntry'
+    ...
+  }
+}
+```
+
 ## Requirements
 
 ### iOS
