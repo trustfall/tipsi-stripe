@@ -15,10 +15,14 @@ dependencies {
   compile('host.exp.exponent:expoview:23.0.0@aar') {
     ...
 +   exclude group: 'com.github.thefuntasty', module: 'CreditCardEntry'
+    exclude group: 'com.gettipsi', module: 'stripeview'
+    exclude group: 'com.stripe', module: 'stripe-android'
     ...
   }
 }
 ```
+
+Some of the instructions below have also been modified for use with expo
 
 ## Requirements
 
@@ -109,20 +113,6 @@ allprojects {
 }
 ```
 
-In your `android/app/src/main/java/com/%YOUR_APP_NAME%/MainApplication.java` add:
-
-```diff
-...
-+ import com.gettipsi.stripe.StripeReactPackage;
-...
-protected List<ReactPackage> getPackages() {
-  return Arrays.<ReactPackage>asList(
--   new MainReactPackage()
-+   new MainReactPackage(),
-+   new StripeReactPackage()
-  );
-}
-```
 
 Ensure that you have Google Play Services installed:
 
@@ -857,22 +847,7 @@ You also need to setup your `AppDelegate.m` app delegate to forward URLs to the 
 
 ##### Android
 
-You have to declare your return url in application's `build.gradle` file.
-In order to do that, add the following code replacing `CUSTOM_SCHEME` with the your custom scheme inside `android.defaultConfig` block.
-
-```groovy
-android {
-    // ...
-    defaultConfig {
-        // ...
-        manifestPlaceholders = [
-            tipsiStripeRedirectScheme: "CUSTOM_SCHEME"
-        ]
-    }
-    // ...
-}
-```
-> Example: if the return url used is `my_custom_scheme://callback`, replace `CUSTOM_SCHEME` with `my_custom_scheme`.
+This url is already setup in Expo
 
 **NOTE**: the redirection will be automatically handled by tipsi-stripe **on its own activity**.
 In case of your app makes use of its own custom URL scheme for other purpose rather than handling stripe payments, be sure that `CUSTOM_SCHEME` value is not exaclty the same that the one used in the rest of the app.
